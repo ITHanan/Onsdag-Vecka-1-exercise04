@@ -12,14 +12,14 @@ jobs:
 
    
     environment:
-      name: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+      name: ${{ github.ref_name == 'main' && 'production' || 'development' }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set ENV_NAME for runtime prints
-        run: echo "ENV_NAME=${{ github.ref_name == 'main' && 'prod' || 'dev' }}" >> $GITHUB_ENV
+        run: echo "ENV_NAME=${{ github.ref_name == 'main' && 'production' || 'development' }}" >> $GITHUB_ENV
 
       - name: Print deployment info
         run: |
