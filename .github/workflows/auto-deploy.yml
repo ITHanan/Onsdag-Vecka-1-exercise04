@@ -1,0 +1,29 @@
+name: Auto Deploy (branch → env)
+
+on:
+  push:
+    branches:
+      - '**'   # trigger on push to any branch
+
+jobs:
+  deploy:
+    name: Deploy (branch-aware)
+    runs-on: ubuntu-latest
+
+   
+    environment:
+      name: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set ENV_NAME for runtime prints
+        run: echo "ENV_NAME=${{ github.ref_name == 'main' && 'prod' || 'dev' }}" >> $GITHUB_ENV
+
+      - name: Print deployment info
+        run: |
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Deploying to: $ENV_NAME"
+          echo "Service: ${{ vars.SERVICE_NAME || '<<SERVICE_NAME not set>>' }}"
+          echo "API Key: ${{ secrets.MY_API_KEY || '<<no secret>>' }}"
